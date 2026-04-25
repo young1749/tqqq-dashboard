@@ -183,7 +183,7 @@ function notif(msg,type){
 
 async function loadPrice(){
   try{
-    const r=await fetch('http://127.0.0.1:8080/api/tqqq');
+    const r=await fetch('/api/tqqq');
     const d=await r.json();
     curP=d.currentPrice;
     document.getElementById('mP').textContent='$'+curP.toFixed(2);

@@ -237,15 +237,15 @@ function drawChart(range){
   const leg=document.getElementById('cleg');leg.style.display='flex';
   leg.innerHTML='<span><span style="width:14px;height:2px;background:#f97316;display:inline-block"></span>TQQQ</span><span><span style="width:14px;height:0;border-top:2px dashed #4ade80;display:inline-block"></span>200MA</span><span><span style="width:10px;height:10px;background:rgba(255,80,80,0.12);display:inline-block;border-radius:2px"></span>상승장</span><span><span style="width:10px;height:10px;background:rgba(80,160,255,0.12);display:inline-block;border-radius:2px"></span>하락장</span>';
 }
-const ds={1:false,2:false,3:false};
-function td(n){ds[n]=!ds[n];document.getElementById('d'+n).classList.toggle('on',ds[n]);const cnt=[1,2,3].filter(i=>ds[i]).length;const el=document.getElementById('mast');if(cnt===3){el.style.color='#22c55e';el.textContent='✓ 3일 연속 확인 완료 — 진입 조건 충족!';if(Notification.permission==='granted')new Notification('TQQQ',{body:'🚀 3일 연속 확인! 진입 조건 충족!'});}else if(cnt>0){el.style.color='#f59e0b';el.textContent=cnt+'일 확인 · '+(3-cnt)+'일 더 필요';}else{el.style.color='#334155';el.textContent='200일선 위 마감 확인 시 클릭';}}
+const ds=JSON.parse(localStorage.getItem("tqqq_days")||'{"1":false,"2":false,"3":false}');
+function td(n){ds[n]=!ds[n];localStorage.setItem("tqqq_days",JSON.stringify(ds));document.getElementById('d'+n).classList.toggle('on',ds[n]);const cnt=[1,2,3].filter(i=>ds[i]).length;const el=document.getElementById('mast');if(cnt===3){el.style.color='#22c55e';el.textContent='✓ 3일 연속 확인 완료 — 진입 조건 충족!';if(Notification.permission==='granted')new Notification('TQQQ',{body:'🚀 3일 연속 확인! 진입 조건 충족!'});}else if(cnt>0){el.style.color='#f59e0b';el.textContent=cnt+'일 확인 · '+(3-cnt)+'일 더 필요';}else{el.style.color='#334155';el.textContent='200일선 위 마감 확인 시 클릭';}}
 let pd=[0,30,70];
 const pc=['#60a5fa','#4ade80','#fbbf24'],pn=['TQQQ','SPYM','SGOV'];
 const portObj=new Chart(document.getElementById('portChart').getContext('2d'),{type:'doughnut',data:{labels:pn,datasets:[{data:pd,backgroundColor:pc,borderColor:'#0d1420',borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false}}}});
 function rPL(){document.getElementById('plist').innerHTML=pn.map((n,i)=>'<div class="prow"><span class="pnm" style="color:'+pc[i]+'">'+n+'</span><div class="pbw"><div class="pb" style="width:'+pd[i]+'%;background:'+pc[i]+'"></div></div><span class="ppc">'+pd[i]+'%</span></div>').join('');}
 function sP(d){pd=d;portObj.data.datasets[0].data=d;portObj.update();rPL();}
 rPL();
-load();setInterval(load,5*60*1000);
+[1,2,3].forEach(n=>{if(ds[n]||ds[String(n)]){document.getElementById("d"+n).classList.add("on");document.querySelector("#d"+n+" .ddot").style.background="#22c55e";}});load();setInterval(load,5*60*1000);
 </script>
 </body>
 </html>

@@ -25,7 +25,6 @@ button{background:#1d4ed8;border:none;color:#fff;padding:8px 16px;border-radius:
 button:hover{background:#2563eb}
 .inp-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#334155;margin-bottom:5px}
 .inp-wrap{display:flex;flex-direction:column;gap:5px}
-/* 익절 단계 */
 .step-grid{display:flex;flex-direction:column;gap:8px}
 .step-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;border:1px solid #1a2235;background:#07090f;transition:.3s}
 .step-row.done{border-color:#22c55e;background:rgba(34,197,94,.05)}
@@ -47,20 +46,17 @@ button:hover{background:#2563eb}
 .step-row.active .step-badge{background:rgba(249,115,22,.15);color:#fb923c;border:1px solid rgba(249,115,22,.3)}
 .step-row.next .step-badge{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.3)}
 .step-row.pending .step-badge{background:#0a0d14;color:#334155;border:1px solid #1a2235}
-/* 스탑로스 */
 .stop-bar{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;border:1.5px solid rgba(239,68,68,.3);background:rgba(239,68,68,.04)}
 .stop-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;flex-shrink:0}
 .stop-price{font-family:monospace;font-size:20px;font-weight:800;color:#ef4444}
 .stop-info{flex:1}
 .stop-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#ef4444;margin-bottom:2px}
 .stop-desc{font-size:11px;color:#475569}
-/* 매매일지 */
 .linp{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:7px;margin-bottom:12px}
 table{width:100%;border-collapse:collapse;font-size:11px}
 th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1e293b;padding:5px 8px;border-bottom:1px solid #1a2235;text-align:left}
 td{padding:8px 8px;border-bottom:1px solid #0a0d14;color:#64748b;font-family:monospace}
 .buy{color:#3b82f6;font-weight:700}.sell{color:#ef4444;font-weight:700}
-/* 인출 순서 */
 .withdraw-row{display:flex;gap:10px}
 .wd-item{flex:1;background:#07090f;border:1px solid #1a2235;border-radius:9px;padding:12px;text-align:center}
 .wd-num{font-size:24px;font-weight:800;color:#334155;margin-bottom:4px}
@@ -69,6 +65,8 @@ td{padding:8px 8px;border-bottom:1px solid #0a0d14;color:#64748b;font-family:mon
 .notif{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:999;padding:14px 24px;border-radius:12px;font-weight:700;border:1.5px solid;min-width:300px;text-align:center}
 .notif.p{background:#0d2818;border-color:#22c55e;color:#4ade80}
 .notif.w{background:#1c0a0a;border-color:#ef4444;color:#ef4444}
+.del-btn{background:none;border:none;color:#334155;cursor:pointer;font-size:12px;padding:2px 6px}
+.del-btn:hover{color:#ef4444}
 </style>
 </head>
 <body>
@@ -80,16 +78,12 @@ td{padding:8px 8px;border-bottom:1px solid #0a0d14;color:#64748b;font-family:mon
     <a href="/profit" class="on">&#x1F4B0; &#xC218;&#xC775;</a>
   </div>
 </div>
-
-<!-- 현재가 요약 -->
-<div class="grid4" style="margin-bottom:14px" id="metaRow">
+<div class="grid4" style="margin-bottom:14px">
   <div class="mc"><div class="ml">TQQQ &#xD604;&#xC7AC;&#xAC00;</div><div class="mv" id="mP">&#xB85C;&#xB529;...</div></div>
-  <div class="mc"><div class="ml">&#xB204;&#xC801; &#xC218;&#xC775;</div><div class="mv" id="pT">—</div></div>
-  <div class="mc"><div class="ml">&#xC218;&#xC775;&#xB960;</div><div class="mv" id="pP">—</div></div>
-  <div class="mc"><div class="ml">&#xD3C9;&#xAC00;&#xAE08;&#xC561;</div><div class="mv" id="pV">—</div></div>
+  <div class="mc"><div class="ml">&#xB204;&#xC801; &#xC218;&#xC775;</div><div class="mv" id="pT">&#x2014;</div></div>
+  <div class="mc"><div class="ml">&#xC218;&#xC775;&#xB960;</div><div class="mv" id="pP">&#x2014;</div></div>
+  <div class="mc"><div class="ml">&#xD3C9;&#xAC00;&#xAE08;&#xC561;</div><div class="mv" id="pV">&#x2014;</div></div>
 </div>
-
-<!-- 내 포지션 입력 -->
 <div class="panel">
   <div class="ph"><span class="pt">&#xB0B4; TQQQ &#xD3EC;&#xC9C0;&#xC158; &#xC785;&#xB825;</span></div>
   <div class="grid3" style="margin-bottom:12px">
@@ -98,27 +92,23 @@ td{padding:8px 8px;border-bottom:1px solid #0a0d14;color:#64748b;font-family:mon
     <div class="inp-wrap"><div class="inp-lbl">&#xBAA9;&#xD45C; &#xC218;&#xC775;&#xB960; (%)</div><input type="number" id="targetPct" placeholder="ex) 50" oninput="update()"></div>
   </div>
   <div class="grid4">
-    <div class="mc"><div class="ml">&#xD604;&#xC7AC; &#xC218;&#xC775;&#xB960;</div><div class="mv" id="curPct">—</div></div>
-    <div class="mc"><div class="ml">&#xC218;&#xC775;&#xAE08;</div><div class="mv" id="curPnl">—</div></div>
-    <div class="mc"><div class="ml">&#xD3C9;&#xAC00;&#xAE08;&#xC561;</div><div class="mv" id="curVal">—</div></div>
-    <div class="mc"><div class="ml">&#xBAA9;&#xD45C;&#xAC00;</div><div class="mv" id="curTgt">—</div></div>
+    <div class="mc"><div class="ml">&#xD604;&#xC7AC; &#xC218;&#xC775;&#xB960;</div><div class="mv" id="curPct">&#x2014;</div></div>
+    <div class="mc"><div class="ml">&#xC218;&#xC775;&#xAE08;</div><div class="mv" id="curPnl">&#x2014;</div></div>
+    <div class="mc"><div class="ml">&#xD3C9;&#xAC00;&#xAE08;&#xC561;</div><div class="mv" id="curVal">&#x2014;</div></div>
+    <div class="mc"><div class="ml">&#xBAA9;&#xD45C;&#xAC00;</div><div class="mv" id="curTgt">&#x2014;</div></div>
   </div>
 </div>
-
-<!-- 스탑로스 -->
 <div class="panel">
   <div class="ph"><span class="pt">&#x1F6E1; &#xC2A4;&#xD0C1;&#xB85C;&#xC2A4; (TQQQ &#xD3C9;&#xB2E8; -5%)</span></div>
-  <div class="stop-bar" id="stopBar">
+  <div class="stop-bar">
     <div class="stop-dot"></div>
     <div class="stop-info">
       <div class="stop-lbl">&#xC2A4;&#xD0C1;&#xB85C;&#xC2A4; &#xD2B8;&#xB9AC;&#xAC70; &#xAC00;&#xACA9;</div>
-      <div class="stop-desc">&#xD3C9;&#xB2E8; &#xC785;&#xB825; &#xD6C4; &#xD655;&#xC778; · &#xBC1C;&#xB3D9; &#xC2DC; &#xBCF4;&#xC720; &#xC218;&#xB7C9; 50% &#xC2DC;&#xC7A5;&#xAC00; &#xB9E4;&#xB3C4;</div>
+      <div class="stop-desc">&#xD3C9;&#xB2E8; &#xC785;&#xB825; &#xD6C4; &#xD655;&#xC778; · &#xBC1C;&#xB3D9; &#xC2DC; &#xBCF4;&#xC720; 50% &#xC2DC;&#xC7A5;&#xAC00; &#xB9E4;&#xB3C4;</div>
     </div>
-    <div class="stop-price" id="stopPrice">—</div>
+    <div class="stop-price" id="stopPrice">&#x2014;</div>
   </div>
 </div>
-
-<!-- TQQQ 익절 가이드 -->
 <div class="panel">
   <div class="ph"><span class="pt">&#x1F4C8; TQQQ &#xC775;&#xC808; &#xB2E8;&#xACC4; &#xAC00;&#xC774;&#xB4DC;</span>
     <span style="font-size:10px;color:#475569">&#xB204;&#xC801; &#xAE30;&#xC900; · &#xD55C; &#xBC88; &#xB2EC;&#xC131; &#xD6C4; &#xC7AC;&#xBC1C;&#xB3D9; &#xC5C6;&#xC74C;</span>
@@ -130,25 +120,21 @@ td{padding:8px 8px;border-bottom:1px solid #0a0d14;color:#64748b;font-family:mon
   </div>
   <div class="step-grid" id="stepGrid"></div>
 </div>
-
-<!-- 인출 순서 -->
 <div class="panel">
   <div class="ph"><span class="pt">&#x1F4E4; &#xC778;&#xCD9C; &#xC21C;&#xC11C;</span></div>
   <div class="withdraw-row">
     <div class="wd-item"><div class="wd-num" style="color:#fbbf24">1</div><div class="wd-name" style="color:#fbbf24">SGOV</div><div class="wd-desc">&#xD604;&#xAE08; &#xB300;&#xAE30; / &#xC138;&#xAE08; &#xB0A9;&#xBD80;</div></div>
-    <div class="wd-item" style="opacity:.5"><div class="wd-num">→</div></div>
+    <div class="wd-item" style="opacity:.5"><div class="wd-num">&#x2192;</div></div>
     <div class="wd-item"><div class="wd-num" style="color:#4ade80">2</div><div class="wd-name" style="color:#4ade80">SPYM</div><div class="wd-desc">&#xC775;&#xC808;&#xAE08; &#xBCF4;&#xAD00;&#xC18C;</div></div>
-    <div class="wd-item" style="opacity:.5"><div class="wd-num">→</div></div>
+    <div class="wd-item" style="opacity:.5"><div class="wd-num">&#x2192;</div></div>
     <div class="wd-item"><div class="wd-num" style="color:#60a5fa">3</div><div class="wd-name" style="color:#60a5fa">TQQQ</div><div class="wd-desc">&#xCD5C;&#xD6C4; &#xC218;&#xB2E8;</div></div>
   </div>
   <div style="font-size:10px;color:#334155;margin-top:10px;padding:8px 12px;background:#0a0d14;border-radius:8px">
     &#x26A0;&#xFE0F; &#xC138;&#xAE08; &#xB0A9;&#xBD80; &#xC2DC;&#xC5D0;&#xB3C4; SGOV&#xC5D0;&#xC11C;&#xB9CC; &#xD310;&#xB2E4; · &#xBCC4;&#xB3C4; &#xB9AC;&#xBC38;&#xB7F0;&#xC2F1; &#xC5C6;&#xC74C; · SPYM&#xC740; 200&#xC77C;&#xC120; &#xC774;&#xD0C8; &#xC2DC;&#xC5D0;&#xB9CC; &#xC804;&#xB7C9; &#xB9E4;&#xB3C4;
   </div>
 </div>
-
-<!-- 매매 일지 -->
 <div class="panel">
-  <div class="ph"><span class="pt">&#xB9E4;&#xB9E4; &#xC77C;&#xC9C0;</span></div>
+  <div class="ph"><span class="pt">&#xB9E4;&#xB9E4; &#xC77C;&#xC9C0;</span><button onclick="clearTrades()" style="background:#1a2235;font-size:9px;padding:4px 10px">&#xC804;&#xCCB4; &#xC0AD;&#xC81C;</button></div>
   <div class="linp">
     <input type="date" id="tD">
     <select id="tTk"><option>TQQQ</option><option>SPYM</option><option>SGOV</option></select>
@@ -158,20 +144,25 @@ td{padding:8px 8px;border-bottom:1px solid #0a0d14;color:#64748b;font-family:mon
   </div>
   <div id="log"></div>
 </div>
-
 <script>
 if('Notification' in window)Notification.requestPermission();
 let curP=0,tFired={},stopFired=false;
 document.getElementById('tD').value=new Date().toISOString().split('T')[0];
 
-// 익절 단계 정의
+// 로컬스토리지에서 불러오기
+const trades=JSON.parse(localStorage.getItem('tqqq_trades')||'[]');
+const savedPos=JSON.parse(localStorage.getItem('tqqq_pos')||'{}');
+if(savedPos.avg)document.getElementById('avgPrice').value=savedPos.avg;
+if(savedPos.qty)document.getElementById('holdQty').value=savedPos.qty;
+if(savedPos.tgt)document.getElementById('targetPct').value=savedPos.tgt;
+
 const steps=[
-  {key:'s10', pct:10, type:'small', sell:10, label:'1단계 소익절'},
-  {key:'s25', pct:25, type:'small', sell:10, label:'1단계 소익절'},
-  {key:'s50', pct:50, type:'small', sell:10, label:'1단계 소익절'},
-  {key:'b100',pct:100,type:'big',  sell:50, label:'2단계 대익절'},
-  {key:'b200',pct:200,type:'big',  sell:50, label:'2단계 대익절'},
-  {key:'b300',pct:300,type:'big',  sell:50, label:'2단계 대익절'},
+  {pct:10,type:'small',sell:10,label:'1단계 소익절'},
+  {pct:25,type:'small',sell:10,label:'1단계 소익절'},
+  {pct:50,type:'small',sell:10,label:'1단계 소익절'},
+  {pct:100,type:'big',sell:50,label:'2단계 대익절'},
+  {pct:200,type:'big',sell:50,label:'2단계 대익절'},
+  {pct:300,type:'big',sell:50,label:'2단계 대익절'},
 ];
 
 function notif(msg,type){
@@ -192,11 +183,17 @@ async function loadPrice(){
 }
 
 function update(){
+  // 포지션 저장
+  localStorage.setItem('tqqq_pos',JSON.stringify({
+    avg:document.getElementById('avgPrice').value,
+    qty:document.getElementById('holdQty').value,
+    tgt:document.getElementById('targetPct').value
+  }));
+
   const avg=parseFloat(document.getElementById('avgPrice').value)||0;
   const qty=parseFloat(document.getElementById('holdQty').value)||0;
   const tgt=parseFloat(document.getElementById('targetPct').value)||0;
 
-  // 스탑로스 가격
   if(avg){
     const sp=(avg*0.95).toFixed(2);
     document.getElementById('stopPrice').textContent='$'+sp;
@@ -229,7 +226,6 @@ function update(){
   document.getElementById('curVal').textContent='$'+val.toFixed(2);
   document.getElementById('curTgt').textContent=tgt?'$'+tgtPrice.toFixed(2):'—';
 
-  // 목표 수익률 알림
   if(tgt>0&&pct>=tgt&&!tFired['tgt']){
     tFired['tgt']=true;
     notif('🎯 목표 수익률 +'+tgt+'% 달성! 현재 '+pct.toFixed(2)+'%','p');
@@ -241,10 +237,6 @@ function update(){
 
 function renderSteps(curPct,qty,avg,cp){
   const grid=document.getElementById('stepGrid');
-  let remQty=qty;
-  let doneKeys=JSON.parse(localStorage.getItem('doneSteps')||'[]');
-
-  // 시뮬레이션: 달성한 단계들 소화
   let simQty=qty;
   const stepResults=steps.map(s=>{
     const achieved=curPct>=s.pct;
@@ -256,14 +248,13 @@ function renderSteps(curPct,qty,avg,cp){
   });
 
   grid.innerHTML=stepResults.map((s,i)=>{
-    const prev=i>0?stepResults[i-1]:null;
     const isActive=s.achieved&&(!stepResults[i+1]||!stepResults[i+1].achieved);
     const isDone=s.achieved&&stepResults[i+1]&&stepResults[i+1].achieved;
-    const isNext=!s.achieved&&(!prev||prev.achieved);
+    const isNext=!s.achieved&&(!stepResults[i-1]||stepResults[i-1].achieved);
     let cls=isDone?'done':isActive?'active':isNext?'next':'pending';
     let badge=isDone?'✓ 완료':isActive?'⚡ 현재':isNext?'→ 다음':'대기';
     let detail='';
-    if(avg&&cp){
+    if(avg&&cp&&qty){
       const sellQ=Math.floor(s.simQty*(s.sell/100));
       const sellA=(sellQ*cp).toFixed(0);
       detail=s.simQty+'주 보유 중 '+sellQ+'주 매도 → $'+parseInt(sellA).toLocaleString()+' → SPYM 매수';
@@ -291,22 +282,40 @@ function updatePnL(){
   document.getElementById('pV').textContent='$'+(inv+tot).toFixed(2);
 }
 
-const trades=[];
 function aT(){
   const d=document.getElementById('tD').value,tk=document.getElementById('tTk').value,ty=document.getElementById('tTy').value,pr=parseFloat(document.getElementById('tPr').value);
   if(!d||!pr)return;
   trades.unshift({d,tk,ty,pr:pr.toFixed(2)});
+  localStorage.setItem('tqqq_trades',JSON.stringify(trades));
   document.getElementById('tPr').value='';
   stopFired=false;tFired={};
   rLog();updatePnL();update();
 }
+
+function delTrade(i){
+  trades.splice(i,1);
+  localStorage.setItem('tqqq_trades',JSON.stringify(trades));
+  rLog();updatePnL();
+}
+
+function clearTrades(){
+  if(!confirm('모든 매매 기록을 삭제할까요?'))return;
+  trades.length=0;
+  localStorage.setItem('tqqq_trades',JSON.stringify(trades));
+  rLog();updatePnL();
+}
+
 function rLog(){
   const el=document.getElementById('log');
   if(!trades.length){el.innerHTML='<div style="text-align:center;padding:20px;color:#1e293b;font-size:11px">기록 없음</div>';return;}
-  el.innerHTML='<table><tr><th>날짜</th><th>종목</th><th>구분</th><th>단가</th></tr>'+trades.map(t=>'<tr><td>'+t.d+'</td><td style="color:'+(t.tk==='TQQQ'?'#60a5fa':t.tk==='SPYM'?'#4ade80':'#fbbf24')+'">'+t.tk+'</td><td class="'+(t.ty==='buy'?'buy':'sell')+'">'+t.ty.toUpperCase()+'</td><td>$'+t.pr+'</td></tr>').join('')+'</table>';
+  el.innerHTML='<table><tr><th>날짜</th><th>종목</th><th>구분</th><th>단가</th><th></th></tr>'
+    +trades.map((t,i)=>'<tr><td>'+t.d+'</td><td style="color:'+(t.tk==='TQQQ'?'#60a5fa':t.tk==='SPYM'?'#4ade80':'#fbbf24')+'">'+t.tk+'</td><td class="'+(t.ty==='buy'?'buy':'sell')+'">'+t.ty.toUpperCase()+'</td><td>$'+t.pr+'</td><td><button class="del-btn" onclick="delTrade('+i+')">✕</button></td></tr>').join('')
+    +'</table>';
 }
-rLog();
+
 renderSteps(0,0);
+rLog();
+updatePnL();
 loadPrice();
 setInterval(loadPrice,5*60*1000);
 </script>

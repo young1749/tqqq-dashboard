@@ -180,7 +180,7 @@ function calcRSI(c,p=14){const r=new Array(c.length).fill(null);if(c.length<p+1)
 function notif(msg,type){if(Notification.permission==='granted')new Notification('TQQQ',{body:msg});}
 async function load(){
   try{
-    const r=await fetch('http://127.0.0.1:8080/api/tqqq');
+    const r=await fetch('/api/tqqq');
     const d=await r.json();
     allD=d.dates;allC=d.closes;allMA=d.ma200Series;allVol=d.volumes||[];curP=d.currentPrice;
     const isA=d.isAbove200;
